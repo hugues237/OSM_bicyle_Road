@@ -15,64 +15,93 @@
 >* Osm2pgsql
 >* OSM Data geofabrik
 >* OSM style file
+ 
 
-First setps: 
+### **0. Donwload and install QGIS:**
 
-> 1.   Donwload and install QGIS: use this [This link](https://www.qgis.org/fr/site/forusers/download.html)  
+QGIS is a software package for creating, editing, viewing, analysing and publishing geospatial information.
 
-> 2.  Donwload and install PostgreSQL use this [This link](https://www.postgresql.org/download/)
+> 1. The first step is to donwload QGIS : use this [ link](https://www.qgis.org/fr/site/forusers/download.html) 
+> 2. Install QGIS: installation is quite simple, just click on next until the end.
+
+Donwload QGIS        |  Install QGIS
+:-------------------------:|:-------------------------:
+<img src=images/inqgis.PNG > | <img src=images/qgis.PNG >
+
 
 
 ### **1. PostgreSQL and PostGIS**
 
-in this part, we donwload and install PostgreSQL, PostGIS and Htsore after that we create a database to use to store osm data.
+In this part, we donwload and install PostgreSQL, PostGIS and Htsore after that we create a database to use to store osm data.
 
- > 1.   Donwload and install [PostgreSQL](https://www.enterprisedb.com/downloads/postgres-postgresql-downloads)
+ > 1.   Donwload PostgreSQL [Here](https://www.enterprisedb.com/downloads/postgres-postgresql-downloads)
 
  > 2.   Install PostgreSQL double clik on the setup and after this provide a password for the database superuser postgress we use default password admin. use default port 5432
-
- > 3.  Install PostGIS for this: click on spatial Extensions and select the last version of PostGIS 
-
-Spatial Extensions         |  Select PostGIS
-:-------------------------:|:-------------------------:
-<img src=images/postgis1.PNG width="350" height="200">  |  <img src=images/postgis.PNG width="350" height="200">
-
-After do next->next->next->next and all yes and last do finish. 
-
- > 4. 
-      > - Open pgadmin  
-      > - Create the the new server 
-      > - Go to connection: put host : localhost and set password
-      > - Create a new database
-      > - Open querytools excute the follow commands : \
-            `create extension postgis` \
-             `create extension hstore`
 
 
 Spatial Extensions         |  Select PostGIS           |       Select PostGIS
 :-------------------------:|:-------------------------:|:-------------------------:
-<img src=images/d0.PNG width="450" height="200"> |  <img src=images/d1.PNG width="450" height="200"> |  <img src=images/d2.PNG width="450" height="200"> 
+<img src=images/1.PNG> |  <img src=images/2.PNG > |  <img src=images/3.PNG > 
+
+ > 3.  Install PostGIS for this: click on spatial Extensions and select the last version of PostGIS 
+
+Spatial Extensions         |  Select PostGIS           |       Select PostGIS
+:-------------------------:|:-------------------------:|:-------------------------:
+<img src=images/q1.PNG> |  <img src=images/q2.PNG > |  <img src=images/q3.PNG > 
+
+After do next->next->next->next and all yes and last do finish. 
+
+### **2. Create database**
+
+> 0. Open pgAdmin 
+> 1. Clik on the dropdown list **(Servers(1))** and insert your **password**
+> 2. Do a rigth-click on **PostgreSQL 15** and select **Create-->Database.....**
+> 3. Insert the Name of new database and clik on `Save`. 
+
+1        |  2         |       3
+:-------------------------:|:-------------------------:|:-------------------------:
+<img src=images/p0.PNG > |  <img src=images/p1.PNG > |  <img src=images/p2.PNG > 
+
+
+ ### **3. Enable postgis and hstore**     
+
+>1. In your name of database do a rigth-click and select **Query Tool**
+>2.  In Query dasboard  copy and execute one by one the two following codes to enable postgis and hstore on your database : 
+~~~~sql
+    CREATE extension postgis;
+ ~~~~
+ ~~~~sql
+      CREATE extension hstore;
+ ~~~~
+            
+>3. If everything is successful, clik oon **Extensions** you will see hstore and postgis. 
+
+Query dasboard           |  Check 
+:-------------------------:|:-------------------------:
+<img src=images/p3.PNG > | <img src=images/p4.PNG >
 
 
 
-### **2 Osm2pgsql, OSM Data geofabrik, OSM style file**
 
- > 1. For Osm2pgsql, We use prebuilt binaries for this you can download prebuilt binaries in this [link](https://osm2pgsql.org/download/windows/)  
- Unpack the ZIP file and you can immediately use osm2pgsql.
+### **4 Donwloads Osm2pgsql, OSM Data geofabrik and OSM style file**
 
-
-> 2. Osm2pgsql requires the use of a custom OSM style file to define which tags   are included in the database during import. 
- You can download the default style file [here](https://github.com/openstreetmap/osm2pgsql/blob/master/default.style).
+ > 1. For Osm2pgsql, we use prebuilt binaries for this you can download prebuilt binaries in this [link](https://osm2pgsql.org/download/windows/)
+ >> Donwload the the latest version and unpack the ZIP file and you can immediately use osm2pgsql.
 
 
-> 3. GeoFabrik is a company which specializes in working with OpenStreetMap. They provide a variety of free extracts in raw OSM format on their download website.
+> 2. Osm2pgsql requires the use of a custom OSM style file to define which tags are included in the database during import. 
+ >>You can download the default style file [here](https://github.com/openstreetmap/osm2pgsql/blob/master/default.style).
+
+> 3. GeoFabrik is a company which specializes in working with OpenStreetMap. 
+They provide a variety of free extracts in raw OSM format on their download website.
 The advantage of downloading GeoFabrik data is that it is updated every day, and it’s easy and reliable. One disadvantage is that the data is extracted by country, and not all countries are available.
-For our projet we use OpenStreetMap data for Belgium ,you can download Osm_data/osm2pgsql (extension file pbf) use this [link](https://download.geofabrik.de/europe/belgium.html)
+>>For our projet we use OpenStreetMap data for Belgium, you can download OSM_data/osm2pgsql in this  [link](https://download.geofabrik.de/europe/belgium.html) to donwloads file with **.pbf**
 
 
-### **3 import data in Postgis database using Osm2pgsql**
+### **5 Import data in Postgis database using Osm2pgsql**
 
-Open PgAdmin III and create a new database named osm, just as you did in the previous chapter. To import the data, we will run the osm2pgsql program via the command line.
+We will use the database you created in the previous chapter to store our data.\
+To import the data, we will run the osm2pgsql program via the command line.
 
 Here we will run the application osm2pgsql with several options. We need at least to supply it with:
 
@@ -82,26 +111,33 @@ Here we will run the application osm2pgsql with several options. We need at leas
 
  Type the following command in the command line, before replacing the location of the OSM file and style file with your own.
 
-> location\osm2pgsql-bin\osm2pgsql.exe -c -d database -U user -W  -H localhost -S -K location\default.style location belgium-latest.osm.pbf \
-`for example : 
-C:\Users\Hugues.Kamto.Kamden\Downloads\osm2pgsql-bin\osm2pgsql.exe -c -d osm -U postgres -W  -H localhost -S -K C:\Users\Hugues.Kamto.Kamden\Downloads\default.style C:\Users\Hugues.Kamto.Kamden\Downloads\belgium-latest.osm.pbf `
+> location\osm2pgsql-bin\osm2pgsql.exe -c -d database -u user -w  -h localhost -j -s location\default.style location\belgium-latest.osm.pbf \
+`For example : 
+C:\Users\Hugues.Kamto.Kamden\Downloads\osm2pgsql-bin\osm2pgsql.exe -c -d lakamtale -u postgres -w  -h localhost -j -s C:\Users\Hugues.Kamto.Kamden\Downloads\default.style C:\Users\Hugues.Kamto.Kamden\Downloads\belgium-latest.osm.pbf `
 
-Press Enter. If all goes well, the process should begin running. It may take a few minutes for all of the data to load into the database.
+Press Enter and insert de password of the database. 
 
+If all goes well, the process should begin running. It may take a few minutes for all of the data to load into the database.
 
-### **TESTINT IT**
+<img src=images/load.PNG> 
+
+### **6 TESTINT IT**
 
 We can test that the import was successful and view the data in our database using QGIS that we install in the first part.
 
-Open QGIS and make rigth-click on the “Postgres”  and choice new connection option 
+Open QGIS and in the left part make rigth-click on the “PostgreSQL”  and choice new connection option 
 
-Give the new connection a name. Under database type osm (the name of your database).
-Enter the username postgres and your password below.
+- Insert name of the new connection
+- Insert the Host and  Database ().
+- Cick on ok and Enter the username and password. 
+- Click OK to save the connection settings. 
 
-<img src=images/conex.PNG width="500" height="500"> 
+ 1           |  2 
+:-------------------------:|:-------------------------:
+<img src=images/qg1.PNG > | <img src=images/qg2.PNG >
 
+After that: 
 
-Click OK to save the connection settings. 
 Then click on PostgreSQL connect to your PostgreSQL server.
 Click to  “public” to see all of the layers (tables) in your database. 
 Notice that osm2pgsql creates a separate table for different object types - points, lines, and polygons. 
@@ -109,40 +145,52 @@ It also creates a roads table, which contains only major roads.
 
 Click to one or more of the layers to see the plots and If is the first time choose WGS84 as the CRS (on bottom in right).
 
+In menu of QGIS clik on Plugins and Install Plugins...
+Search QuickMapServices and click install Plugin
+
+In menu of QGIS clik on Web and QuickMapServices --->OSM--->OSM Standard
+
+   Install Plugins         |  Choose WGS84 as the CRS
+:-------------------------:|:-------------------------:
+<img src=images/plugin.PNG > | <img src=images/wgs84.PNG >
+
 If everything is successful, you will see the layers you selected displayed in QGIS
 
-<img src=images/conex1.PNG width="700" height="500"> 
+<img src=images/last.PNG > 
 
 Other option we can quilkly test if the import was successful for this we can use Pgadmin. 
-open pgadmin clik on your server--clik on your database-clique schema and clik on Tables.
+open pgadmin clik on  Server clik on PostgreSQL clik on your database clik Schemas and clik on Tables.
 If everything is successful, you will see the layers you selected displayed in QGIS
 
-<img src=images/conex3.PNG width="700" height="700"> 
-### **TESTINT IT**
-
-For our projet, we use the `view cyclosm_ways` for the **cyclosm-cartocss-style** projet. cyclosm-cartocss-style  is a new cycle-oriented render , contrary to OpenCycleMap, this render is free and open-source software and aims at being more complete to take into account a wider diversity of cycling habits., this views provides all the ways of the country.  
-
-That you can see or download the file code [there](https://github.com/cyclosm/cyclosm-cartocss-style/blob/master/views.sql)
-
-once this has been done: 
-open pgadmin clik and connect in database.
-make rigth-click on database and select query tools
-copy an pass the code sql of 'view cyclosm_ways` and excute 
-you can see the view in views
-
-<img src=images/view.PNG width="3000" height="500">
-
-### **Lanes and Cycleways**
+<img src=images/database.PNG> 
 
 
-to create a lanes layout ,
+### **7 OSM_bicyle_Road**
+
+#### **7.0 create view cyclosm_ways**
+
+For our projet, we use the `view cyclosm_ways` for the **cyclosm-cartocss-style** projet. cyclosm-cartocss-style  is a new cyc84le-oriented render , contrary to OpenCycleMap, this render is free and open-source software and aims at being more complete to take into account a wider diversity of cycling habits, this views provides all the ways of the country.  
+
+That you can see or download the file code to create view [there](https://github.com/hugues237/OSM_bicyle_Road/blob/main/source_code/cyclosm_ways.sql)
+
+Once this has been done: 
+- Open pgadmin clik and connect in database.
+- Make rigth-click on database and select query tools
+- Copy an paste the code sql in the file and excute the query
+ - You can see the view in views
+<img src=images/end.PNG>
 
 
-In order to create our the lanes and cycleways layouts base on our views,
-Open QGIS and make clik on the PostgreSQL and choice  connection after this make right-clik on the connection and choice option 'Execute SQl...'  a new window will be opened
+### **7.1 Lanes and Cycleways**
 
-### **Lanes**
-for the lane in the new window that opened copy and paste the SQL followowing source code: 
+In order to create our the lanes and cycleways layouts in QGIS base on our previous view,
+
+- Open QGIS and make clik on the PostgreSQL
+- Choice  connection and  make right-clik on the connection 
+- Choice option 'Execute SQl...'  a new window will be opened
+
+#### **Lanes**
+For the lane in the new window that opened copy and paste the SQL following source code: 
 ~~~~sql
 select *
   from public.cyclosm_ways
@@ -157,12 +205,12 @@ select *
 - change the name of the layer optional. 
 - At the end click on "Load Layer" in bottom
 
-![connect QGIS and Postgress](images/lane.PNG)
+![connect QGIS and Postgress](images/lanes.PNG)
 
-### **Cycleways**
+#### **Cycleways**
 
-For the creation of cylCycleways,  the steps are the same that Lanes. 
-replace only the the preview code by the followind code : 
+For the creation of layout cylcleways, the steps are the same that for the  Lanes 
+just replace only the the preview code by the following code : 
 
 ~~~~sql
 select *
@@ -170,10 +218,10 @@ select *
  where type ='cycleway'
              and 
             (bicycle not in ('no','use_sidepath','delivery','permit','permissive','destination','mtb','military','dismount','customers','undefined','discouraged','no|designated','unknown') or bicycle is null)
-			 and 
-            (cycleway_left_render is null 
+			       and 
+             cycleway_left_render is null 
              and  
-		     cycleway_right_render is null )			 
+		        cycleway_right_render is null 			 
 union
 
 select *
@@ -182,22 +230,23 @@ select *
         and 
         (cycleway_left_render is null 
         and  
-		cycleway_right_render is null )
-		and 
-		type not in ('cycleway')
+		    cycleway_right_render is null )
+		    and 
+		    type not in ('cycleway')
 ~~~~
 
 If everything is successful, you will see the layers you selected displayed in QGIS 
 
-![connect QGIS and Postgress](images/lane1.PNG)
+![connect QGIS and Postgress](images/view.PNG)
 
 
-### **Computes lenght Lanes and Cycleways per commune**
+### **8. Computes lenght Lanes and Cycleways per commune**
 
-to compute the length of cycleways or lanes per commune follow the following steps: 
+To compute the length of cycleways or lanes per commune follow the following steps: 
  > Add communes-belges-2019.geojson layer in QGIS for this: 
-
-  - In QGIS Click on the "Layer" menu, mouse-over "Add Layer" and click "Add Vector Layer..."  
+   
+  - You can download the geojson file in this [link](https://github.com/hugues237/OSM_bicyle_Road) 
+  - In QGIS click on the "Layer" menu, mouse-over "Add Layer" and click "Add Vector Layer..."  
 - If the geojson you have are on your local machine, all you need to do is click on the Browse button and navigate to the folder where your geojson are. 
 - Clik on add wait few secondes after clik on add Layers
 
@@ -213,4 +262,10 @@ to compute the length of cycleways or lanes per commune follow the following ste
 ![connect QGIS and Postgress](images/compu.PNG)
 
 
-### **Parsings and export the two files in .csv**
+### **9.Parsings and export the two files in .csv**
+
+In this section, we perform some processing on the obtained layout in order to export a .csv file with the postal code of the commune, the name of the commune, the distance in meters and kilometres.
+
+To do this you can follow This video [link](https://www.awesomescreenshot.com/video/16123894?key=56badd5a6861db1aab7a444c0ab6bf17) which explains the case of the lane. 
+
+The process is the same for cycleways. 
